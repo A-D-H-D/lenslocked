@@ -1,9 +1,0 @@
-# Binaries
-lenslocked
-
-# If you want to be broader for Go projects:
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
