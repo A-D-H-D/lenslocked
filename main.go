@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -11,7 +13,21 @@ type Router struct{}
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "text/html")
-	fmt.Fprintf(w, "<h1>Good Server	</h1>")
+
+	//parse the template and then execute it using responseWriter
+	tpl, err := template.ParseFiles("templates/home.gohtml")
+	if err != nil {
+		log.Printf("Parsing template: %v", err)
+		http.Error(w, "Error parsing the template", http.StatusInternalServerError)
+		return
+	}
+
+	err = tpl.Execute(w, nil)
+	if err != nil {
+		log.Printf("Error executing the template: %v", err)
+		http.Error(w, "There was an error executing the template", http.StatusInternalServerError)
+		return
+	}
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
