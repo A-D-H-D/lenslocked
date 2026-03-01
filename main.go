@@ -10,28 +10,32 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type Router struct{}
-
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func executeTemplate(w http.ResponseWriter, filepath string) {
 	w.Header().Set("content-Type", "text/html")
 
-	//parse the template and then execute it using responseWriter
-	tpl, err := template.ParseFiles("templates/home.gohtml")
+	tpl, err := template.ParseFiles(filepath)
 	if err != nil {
-		log.Printf("Parsing template: %v", err)
-		http.Error(w, "Error parsing the template", http.StatusInternalServerError)
+		log.Printf("Error parsing files: %v", err)
+		http.Error(w, "There was an error parsing files", http.StatusInternalServerError)
 		return
 	}
 
 	err = tpl.Execute(w, nil)
 	if err != nil {
-		log.Printf("Error executing the template: %v", err)
-		http.Error(w, "There was an error executing the template", http.StatusInternalServerError)
+		log.Printf("There was an error executing templates")
+		http.Error(w, "Error executing templates", http.StatusInternalServerError)
 		return
 	}
 }
 
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	// call the function and pass the filepath
+	tplPath := filepath.Join("templates", "home.gohtml")
+	executeTemplate(w, tplPath)
+}
+
 func contactHandler(w http.ResponseWriter, r *http.Request) {
+<<<<<<< HEAD
 	w.Header().Set("content-Type", "text/html")
 
 	// second method to parsefiles
@@ -49,19 +53,16 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error executing template", http.StatusInternalServerError)
 		return
 	}
+=======
+	// call the execute temp with appropriate filepath
+	tplPath := filepath.Join("templates", "contact.gohtml")
+	executeTemplate(w, tplPath)
+>>>>>>> contact-templete
 }
 
 func faqHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("content-Type", "text/html")
-	fmt.Fprint(w, `<h1>FAQ  page</h1>
-	<ul>
-		<li>Is there a free version? <b>You bet hombre :) </li>
-		<li>How do you contact support? <b>:)<a href=\"mailto:ulqiora@gmail.com\">ulqiora@gmail.com</a> </li>
-
-	</ul>
-
-	`)
-
+	tplPath := filepath.Join("templates", "faq.gohtml")
+	executeTemplate(w, tplPath)
 }
 
 // func pathHandler(w http.ResponseWriter, r *http.Request) {
