@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 – Nothing in Frame</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --fg: #f0ece4;
+      --accent: #ff4d00;
+      --dim: #3a3a3a;
+      --film: #1a1a1a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* film grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+      z-index: 10;
+    }
+
+    /* film strip sides */
+    .filmstrip {
+      position: fixed;
+      top: 0; bottom: 0;
+      width: 52px;
+      background: var(--film);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 8px 0;
+      z-index: 5;
+    }
+    .filmstrip.left { left: 0; }
+    .filmstrip.right { right: 0; }
+    .filmstrip span {
+      display: block;
+      width: 28px;
+      height: 20px;
+      background: var(--bg);
+      border-radius: 3px;
+      margin: 0 auto;
+      opacity: 0.8;
+    }
+
+    .container {
+      text-align: center;
+      z-index: 20;
+      padding: 2rem;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* camera lens SVG area */
+    .lens-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .lens-wrap svg {
+      animation: spin 12s linear infinite;
+      transform-origin: center;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .lens-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.2rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      animation: blink 2.4s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.2; }
+    }
+
+    .big-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 14vw, 9rem);
+      letter-spacing: 6px;
+      color: var(--fg);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .big-text span {
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 2.5rem;
+    }
+
+    .message {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #888;
+      max-width: 340px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .message strong {
+      color: var(--fg);
+    }
+
+    .home-btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .home-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .shutter-log {
+      margin-top: 3rem;
+      font-size: 0.7rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+    }
+
+    .shutter-log span {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- film strips -->
+  <div class="filmstrip left">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="filmstrip right">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="container">
+
+    <!-- spinning lens -->
+    <div class="lens-wrap">
+      <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="90" cy="90" r="84" stroke="#2a2a2a" stroke-width="2"/>
+        <circle cx="90" cy="90" r="72" stroke="#333" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <circle cx="90" cy="90" r="58" stroke="#ff4d00" stroke-width="1" stroke-dasharray="3 8"/>
+        <!-- aperture blades -->
+        <g stroke="#444" stroke-width="1.5">
+          <line x1="90" y1="18" x2="90" y2="42"/>
+          <line x1="90" y1="138" x2="90" y2="162"/>
+          <line x1="18" y1="90" x2="42" y2="90"/>
+          <line x1="138" y1="90" x2="162" y2="90"/>
+          <line x1="35" y1="35" x2="52" y2="52"/>
+          <line x1="128" y1="128" x2="145" y2="145"/>
+          <line x1="145" y1="35" x2="128" y2="52"/>
+          <line x1="52" y1="128" x2="35" y2="145"/>
+        </g>
+        <circle cx="90" cy="90" r="38" stroke="#2a2a2a" stroke-width="8" fill="#0a0a0a"/>
+      </svg>
+      <div class="lens-center">404</div>
+    </div>
+
+    <div class="big-text">OUT OF<br/><span>FRAME</span></div>
+    <div class="subtitle">exposure error · roll not found</div>
+
+    <p class="message">
+      You wandered off the contact sheet.<br/>
+      <strong>This page doesn't exist</strong> — or maybe it never did.<br/>
+      Either way, nothing developed here.
+    </p>
+
+    <a href="/" class="home-btn">↩ Back to the darkroom</a>
+
+    <div class="shutter-log">
+      SHUTTER LOG &nbsp;|&nbsp; <span>f/∞ · 1/∞s · ISO 000</span>
+    </div>
+  </div>
+
+</body>
+</html>

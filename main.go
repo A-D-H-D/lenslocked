@@ -6,45 +6,36 @@ import (
 	"path/filepath"
 
 	"github.com/A-D-H-D/lenslocked/controllers"
+	"github.com/A-D-H-D/lenslocked/templates"
 	"github.com/A-D-H-D/lenslocked/views"
 	"github.com/go-chi/chi/v5"
 )
 
-//	func homeHandler(w http.ResponseWriter, r *http.Request) {
-//		// call the function and pass the filepath
-//		tplPath := filepath.Join("templates", "home.gohtml")
-//		executeTemplate(w, tplPath)
-//	}
-
-// func pathHandler(w http.ResponseWriter, r *http.Request) {
-
-// 	switch r.URL.Path {
-// 	case "/":
-// 		homeHandler(w, r)
-// 	case "/contact":
-// 		contactHandler(w, r)
-
-// 	default:
-// 		// to do handle page not found errer
-// 		http.Error(w, "Page not found", http.StatusNotFound)
-// 	}
-// }
-
 func main() {
 	r := chi.NewRouter()
 
+	// r.Get("/", controllers.StaticHandler(
+	// 	views.Must(views.Parse(filepath.Join("templates", "home.gohtml")))))
+	/** changed from previous one to the one below */
+
 	r.Get("/", controllers.StaticHandler(
-		views.Must(views.Parse(filepath.Join("templates", "home.gohtml")))))
+		views.Must(views.ParseFs(templates.FS, "home.gohtml"))))
 
 	r.Get("/contact", controllers.StaticHandler(
-		views.Must(views.Parse(filepath.Join("templates", "contact.gohtml")))))
+		views.Must(views.ParseFs(templates.FS, "contact.gohtml"))))
 
 	r.Get("/faq", controllers.StaticHandler(
-		views.Must(views.Parse(filepath.Join("templates", "faq.gohtml")))))
+		views.Must(views.ParseFs(templates.FS, "faq.gohtml"))))
 
-	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, "Not found", http.StatusNotFound)
-	})
+	r.Get("/shame", controllers.StaticHandler(
+		views.Must(views.Parse(filepath.Join("templates", "shame.gohtml")))))
+
+	// r.NotFound(func(w http.ResponseWriter, r *http.Request) {
+	// 	http.Error(w, "Not found", http.StatusNotFound)
+	// })
+
+	r.NotFound(controllers.StaticHandler(
+		views.Must(views.Parse(filepath.Join("templates", "404.gohtml")))))
 
 	fmt.Println("Starting web server on port 3000...")
 	http.ListenAndServe(":3000", r)
